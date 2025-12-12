@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Web Form Assignment</title>
+ 
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+  <!-- Simple CSS -->
+<style>
+
+    .error-text {
+
+      color: red;
+
+      font-size: 0.9rem;
+
+      margin-top: 3px;
+
+    }
+ 
+    .input-error {
+
+      border-color: red !important;
+
+    }
+</style>
+</head>
+ 
+<body class="bg-light">
+ 
+  <div class="container mt-5">
+<div class="card shadow">
+<div class="card-body">
+<h3 class="mb-4">Interactive Web Form</h3>
+ 
+        <form id="webForm">
+ 
+          <!-- Username -->
+<div class="mb-3">
+<label class="form-label">Username</label>
+<input type="text" id="username" class="form-control">
+<small id="usernameError" class="error-text d-none">this filed must not be empty</small>
+</div>
+ 
+          <!-- Email -->
+<div class="mb-3">
+<label class="form-label">Email</label>
+<input type="email" id="email" class="form-control">
+<small id="emailError" class="error-text d-none">this filed must not be empty</small>
+</div>
+ 
+          <!-- Password -->
+<div class="mb-3">
+<label class="form-label">Password</label>
+<input type="password" id="password" class="form-control">
+<small id="passwordError" class="error-text d-none">this filed must not be empty</small>
+</div>
+ 
+          <!-- Confirm Password -->
+<div class="mb-3">
+<label class="form-label">Confirm Password</label>
+<input type="password" id="confirmPassword" class="form-control">
+<small id="confirmPasswordError" class="error-text d-none">this filed must not be empty</small>
+<small id="confirmMismatchError" class="error-text d-none">
+
+              confirmed password mismatched the password
+</small>
+</div>
+ 
+          <!-- Topics -->
+<div class="mb-3">
+<label class="form-label fw-bold">
+
+              Interesting Topics
+<small id="topicsError" class="error-text d-none ms-2">
+
+                At least one topic must be selected
+</small>
+</label>
+ 
+            <div class="form-check">
+<input class="form-check-input topic" type="checkbox"> HTML
+</div>
+<div class="form-check">
+<input class="form-check-input topic" type="checkbox"> CSS
+</div>
+<div class="form-check">
+<input class="form-check-input topic" type="checkbox"> JavaScript
+</div>
+</div>
+ 
+          <!-- Gender -->
+<div class="mb-3">
+<label class="form-label fw-bold">
+
+              Gender
+<small id="genderError" class="error-text d-none ms-2">
+
+                please choose your gender
+</small>
+</label>
+ 
+            <select id="gender" class="form-select">
+<option>--</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+</div>
+ 
+          <!-- Submit -->
+<button type="submit" class="btn btn-primary">Submit</button>
+ 
+        </form>
+</div>
+</div>
+</div>
+ 
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+ 
+  <!-- Simple JavaScript -->
+<script>
+
+    $(document).ready(function () {
+ 
+      function showError(inputId, errorId) {
+
+        $("#" + inputId).addClass("input-error");
+
+        $("#" + errorId).removeClass("d-none");
+
+      }
+ 
+      function hideError(inputId, errorId) {
+
+        $("#" + inputId).removeClass("input-error");
+
+        $("#" + errorId).addClass("d-none");
+
+      }
+ 
+      function isEmpty(id) {
+
+        return $("#" + id).val().trim() === "";
+
+      }
+ 
+      $("#webForm").submit(function (e) {
+
+        e.preventDefault();
+ 
+        let valid = true;
+ 
+        // Required fields
+
+        const fields = [
+
+          ["username", "usernameError"],
+
+          ["email", "emailError"],
+
+          ["password", "passwordError"],
+
+          ["confirmPassword", "confirmPasswordError"]
+
+        ];
+ 
+        fields.forEach(function (f) {
+
+          if (isEmpty(f[0])) {
+
+            showError(f[0], f[1]);
+
+            valid = false;
+
+          } else {
+
+            hideError(f[0], f[1]);
+
+          }
+
+        });
+ 
+        // Topics
+
+        if ($(".topic:checked").length === 0) {
+
+          $("#topicsError").removeClass("d-none");
+
+          valid = false;
+
+        } else {
+
+          $("#topicsError").addClass("d-none");
+
+        }
+ 
+        // Gender
+
+        if ($("#gender").val() === "--") {
+
+          $("#genderError").removeClass("d-none");
+
+          valid = false;
+
+        } else {
+
+          $("#genderError").addClass("d-none");
+
+        }
+ 
+        // Password match (check on submit)
+
+        $("#confirmMismatchError").addClass("d-none");
+
+        if (!isEmpty("password") && !isEmpty("confirmPassword")) {
+
+          if ($("#password").val() !== $("#confirmPassword").val()) {
+
+            $("#confirmPassword").addClass("input-error");
+
+            $("#confirmMismatchError").removeClass("d-none");
+
+            valid = false;
+
+          }
+
+        }
+ 
+        if (valid) {
+
+          alert("Form submitted successfully!");
+
+        }
+
+      });
+ 
+    });
+</script>
+ 
+</body>
+</html>
+
+ 
